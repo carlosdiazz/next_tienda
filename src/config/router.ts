@@ -8,4 +8,9 @@ export class RouterApp {
   static product = "/product";
   static checkout = "/checkout";
   static checkoutAddress = "/checkout/address";
+  static orders = "/orders";
+  static empty = "/empty";
+
+  static authLogin = "/auth/login";
+  static authNewAccount = "/auth/new-account";
 }
