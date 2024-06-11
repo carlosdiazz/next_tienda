@@ -29,7 +29,7 @@ export default function CategoryPage({ params }: Props) {
     <>
       <Title
         title={id}
-        subTitile={`Articulos de ${labels[id]}`}
+        subtitle={`Articulos de ${labels[id]}`}
         className="mb-2 capitalize"
       />
       <ProductGrid products={newProducts} />
