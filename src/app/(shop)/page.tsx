@@ -1,3 +1,5 @@
+export const revalidate = 60; // Se actialixara cada 60 segunfos
+
 import { getPaginatedProductsWithImages } from "@/actions";
 import { Pagination, ProductGrid, Title } from "@/components";
 import { RouterApp } from "@/config";
