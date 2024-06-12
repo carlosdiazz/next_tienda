@@ -29,4 +29,3 @@ export default async function Home({ searchParams }: Props) {
     </>
   );
 }
-//{<ProductGrid products={products} />}

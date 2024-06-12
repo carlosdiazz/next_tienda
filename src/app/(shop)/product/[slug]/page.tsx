@@ -1,12 +1,15 @@
+export const revalidate = 10080; //7dias
+
+import { Metadata, ResolvingMetadata } from "next";
+import { getProductBySlug } from "@/actions";
 import {
   ProductMobileSlideShow,
   ProductSlideShow,
   QuantitySelector,
   SizeSelector,
+  StockLabel,
 } from "@/components";
 import { titleFont } from "@/config";
-import { initialData } from "@/seed/seed";
-import { notFound } from "next/navigation";
 
 interface Props {
   params: {
@@ -14,14 +17,39 @@ interface Props {
   };
 }
 
-export default function ProductSlugPage({ params }: Props) {
-  const { slug } = params;
-  const product = initialData.products.find((product) => product.slug === slug);
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  // read route params
+  const slug = params.slug;
 
-  if (!product) {
-    //SI no existe lo mando para NotFound
-    notFound();
-  }
+  // fetch data
+  const product = await getProductBySlug(slug);
+
+  // optionally access and extend (rather than replace) parent metadata
+  //const previousImages = (await parent).openGraph?.images || [];
+
+  return {
+    title: product?.title ?? "Producto no encontrado",
+    description: product?.description ?? "",
+    openGraph: {
+      title: product?.title ?? "Producto no encontrado",
+      description: product?.description ?? "",
+      images: [`/products/${product?.images[1]}`],
+    },
+  };
+}
+
+export default async function ProductSlugPage({ params }: Props) {
+  const { slug } = params;
+  //const product = initialData.products.find((product) => product.slug === slug);
+  const product = await getProductBySlug(slug);
+
+  //if (!product) {
+  //  //SI no existe lo mando para NotFound
+  //  notFound();
+  //}
 
   return (
     //En pantallas pequena sera una COlumna en la demas 3
@@ -29,14 +57,23 @@ export default function ProductSlugPage({ params }: Props) {
       {/* SlideShow => este va a tomar 2/3 de la pantalla */}
       <div className="col-span-1 md:col-span-2 ">
         {/* Mobile Slidesshow */}
-        <ProductMobileSlideShow title={product.title} images={product.images} className="block md:hidden"/>
+        <ProductMobileSlideShow
+          title={product.title}
+          images={product.images}
+          className="block md:hidden"
+        />
 
         {/* Destop Slidesshow */}
-        <ProductSlideShow title={product.title} images={product.images} className="hidden md:block"/>
+        <ProductSlideShow
+          title={product.title}
+          images={product.images}
+          className="hidden md:block"
+        />
       </div>
 
       {/* Detalles */}
       <div className="col-span-1 px-5 ">
+        <StockLabel slug={product.slug} />
         <h1 className={`${titleFont.className} antialiased font-bold text-xl`}>
           {product.title}
         </h1>
