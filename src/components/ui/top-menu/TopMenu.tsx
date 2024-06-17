@@ -57,7 +57,7 @@ export const TopMenu = () => {
           <IoSearchOutline className="w-5 h-5" />
         </Link>
 
-        <Link href={RouterApp.cart} className="mx-2">
+        <Link href={ (totalItemsInCrt===0 && loaded) ? RouterApp.empty : RouterApp.cart} className="mx-2">
           <div className="relative">
             {( loaded && totalItemsInCrt > 0)  && (
               <span className="absolute text-xs px-1 rounded-full  font-bold -top-2 bg-blue-700 text-white -right-2">
