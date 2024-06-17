@@ -6,7 +6,6 @@ export const metadata: Metadata = {
   title: {
     template: "%s | Diaz Shop",
     default: 'Home | Diaz Shop'
-    
   },
   description: "Tienda creada de prueba construida en Next",
 };

@@ -1,13 +1,19 @@
-'use client'
+"use client";
 import { RouterApp, titleFont } from "@/config";
-import { useUiStore } from "@/store";
+import { useCartStore, useUiStore } from "@/store";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { IoCartOutline, IoSearchOutline } from "react-icons/io5";
 
 export const TopMenu = () => {
+  const openSideMenu = useUiStore((state) => state.openSideMenu);
+  const totalItemsInCrt = useCartStore((state) => state.getTotalItems());
 
-  const openSideMenu = useUiStore((state) => state.openSideMenu)
+  const [loaded, setloaded] = useState(false);
+
+  useEffect(() => {
+    setloaded(true)
+  }, [])
 
   return (
     <nav className="flex px-5 justify-between items-center w-full">
@@ -53,16 +59,20 @@ export const TopMenu = () => {
 
         <Link href={RouterApp.cart} className="mx-2">
           <div className="relative">
-            <span className="absolute text-xs px-1 rounded-full  font-bold -top-2 bg-blue-700 text-white -right-2">
-              3
-            </span>
+            {( loaded && totalItemsInCrt > 0)  && (
+              <span className="absolute text-xs px-1 rounded-full  font-bold -top-2 bg-blue-700 text-white -right-2">
+                {totalItemsInCrt}
+              </span>
+            )}
+
             <IoCartOutline className="w-5 h-5" />
           </div>
         </Link>
 
         <button
-          onClick={()=>openSideMenu()}
-          className="m-2 p-2 rounded-md transition-all hover:bg-gray-100">
+          onClick={() => openSideMenu()}
+          className="m-2 p-2 rounded-md transition-all hover:bg-gray-100"
+        >
           Menu
         </button>
       </div>

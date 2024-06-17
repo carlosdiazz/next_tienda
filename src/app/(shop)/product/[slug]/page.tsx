@@ -3,6 +3,7 @@ export const revalidate = 10080; //7dias
 import { Metadata, ResolvingMetadata } from "next";
 import { getProductBySlug } from "@/actions";
 import {
+  AddToCart,
   ProductMobileSlideShow,
   ProductSlideShow,
   QuantitySelector,
@@ -79,17 +80,7 @@ export default async function ProductSlugPage({ params }: Props) {
         </h1>
         <p className="text-lg mb-5">${product.price}.00</p>
 
-        {/* Selector de Tallas */}
-        <SizeSelector
-          availableSizes={product.sizes}
-          selectedSize={product.sizes[0]}
-        />
-
-        {/* Selector de Cantidad */}
-        <QuantitySelector quantity={2} />
-
-        {/* Button */}
-        <button className="btn-primary my-5">Agregar al Carrito</button>
+        <AddToCart product={product}/>
 
         {/* Descripcion */}
         <h3 className="font-bold text-sm">Descripcion</h3>
