@@ -5,8 +5,23 @@ import bcryptjs from "bcryptjs";
 import { authConfig } from "./auth.config";
 import prisma from "./lib/prisma";
 
-export const { auth, signIn, signOut } = NextAuth({
+export const { auth, signIn, signOut, handlers } = NextAuth({
   ...authConfig,
+
+  callbacks: {
+    jwt({ token, user }) {
+      if (user) {
+        token.data = user;
+      }
+      return token;
+    },
+
+    session({ session, token, user }) {
+      session.user = token.data as any;
+      return session;
+    },
+  },
+
   providers: [
     Credentials({
       async authorize(credentials) {
@@ -28,7 +43,6 @@ export const { auth, signIn, signOut } = NextAuth({
         //Comaprar las contrasena
         if (!bcryptjs.compareSync(password, user.password)) return null;
 
-        console.log("llego acaaaa");
         //Regresar el usuario sin el password
         const { password: _, ...rest } = user;
         return rest;

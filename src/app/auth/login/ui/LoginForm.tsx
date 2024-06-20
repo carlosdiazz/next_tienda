@@ -5,6 +5,7 @@ import { authenticate } from "@/actions";
 import { RouterApp } from "@/config";
 import clsx from "clsx";
 import Link from "next/link";
+import { useEffect } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { IoInformationOutline } from "react-icons/io5";
 
@@ -14,7 +15,7 @@ export const LoginForm = () => {
   //  authenticate,
   //  undefined,
   //);
-  console.log({ errorMessage });
+
   return (
     <form action={dispatch} className="flex flex-col">
       <label htmlFor="email">Correo electrónico</label>
@@ -36,7 +37,7 @@ export const LoginForm = () => {
           <p className="text-sm text-red-500">Credenciales Incorrectas</p>
         </div>
       )}
-      <LoginButton/>
+      <LoginButton />
 
       {/* divisor l ine */}
       <div className="flex items-center my-5">

@@ -1,6 +1,6 @@
 "use server";
 import { signIn } from "@/auth";
-import { sleep } from "@/utils";
+//import { sleep } from "@/utils";
 import { AuthError } from "next-auth";
 
 // ...
@@ -10,9 +10,8 @@ export async function authenticate(
   formData: FormData
 ) {
   try {
-    await sleep(2);
-    const success = await signIn("credentials", formData);
-    console.log({ prevState, success });
+    await signIn("credentials", formData);
+    return undefined;
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {

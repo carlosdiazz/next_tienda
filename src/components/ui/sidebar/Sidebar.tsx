@@ -3,6 +3,8 @@ import { logout } from "@/actions";
 import { RouterApp } from "@/config";
 import { useUiStore } from "@/store";
 import clsx from "clsx";
+import { Session } from "next-auth";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import {
   IoCloseOutline,
@@ -15,9 +17,17 @@ import {
   IoTicketOutline,
 } from "react-icons/io5";
 
-export const Sidebar = () => {
+interface Props {
+  session:Session | null
+}
+
+export const Sidebar = ({session}:Props) => {
   const isSideMenuOpen = useUiStore((state) => state.isSideMenuOpen);
   const closeMenu = useUiStore((state) => state.closeSideMenu);
+
+  //const { data: session } = useSession();
+  const isAuthnticated = !!session?.user;
+  const isAdmin = session?.user.role === "admin";
 
   return (
     <div>
@@ -62,42 +72,55 @@ export const Sidebar = () => {
         </div>
 
         {/* Menu */}
-        <Link
-          href={RouterApp.profile}
-          onClick={() => closeMenu()}
-          className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
-        >
-          <IoPersonOutline size={30} />
-          <span className="ml-3 text-xl capitalize">Perfil</span>
-        </Link>
+        {isAuthnticated && (
+          <>
+            {" "}
+            <Link
+              href={RouterApp.profile}
+              onClick={() => closeMenu()}
+              className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+            >
+              <IoPersonOutline size={30} />
+              <span className="ml-3 text-xl capitalize">Perfil</span>
+            </Link>
+            <Link
+              href={RouterApp.home}
+              className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+            >
+              <IoTicketOutline size={30} />
+              <span className="ml-3 text-xl capitalize">Ordenes</span>
+            </Link>
+          </>
+        )}
 
-        <Link
-          href={RouterApp.home}
-          className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
-        >
-          <IoTicketOutline size={30} />
-          <span className="ml-3 text-xl capitalize">Ordenes</span>
-        </Link>
-        <Link
-          href={RouterApp.home}
-          className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
-        >
-          <IoLogInOutline size={30} />
-          <span className="ml-3 text-xl capitalize">Ingresar</span>
-        </Link>
-        <button
-          className="flex w-full items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
-          onClick={() => {
-            closeMenu()
-            logout()
-          }}
-        >
-          <IoLogOutOutline size={30} />
-          <span className="ml-3 text-xl capitalize">Salir</span>
-        </button>
+        {!isAuthnticated && (
+          <Link
+            href={RouterApp.authLogin}
+            onClick={() => closeMenu()}
+            className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+          >
+            <IoLogInOutline size={30} />
+            <span className="ml-3 text-xl capitalize">Ingresar</span>
+          </Link>
+        )}
 
-        {/* Line Separator */}
-        <div className="w-full h-px bg-gray-200 my-10" />
+        {isAuthnticated && (
+          <button
+            className="flex w-full items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+            onClick={async () => {
+              closeMenu();
+              await logout();
+            }}
+          >
+            <IoLogOutOutline size={30} />
+            <span className="ml-3 text-xl capitalize">Salir</span>
+          </button>
+        )}
+
+         {/* Line Separator */}
+        {isAdmin && (
+          <>
+            <div className="w-full h-px bg-gray-200 my-10" />
         <Link
           href={RouterApp.home}
           className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
@@ -121,6 +144,11 @@ export const Sidebar = () => {
           <IoPeopleOutline size={30} />
           <span className="ml-3 text-xl capitalize">Usuarios</span>
         </Link>
+          </>
+        )}
+
+       
+        
       </nav>
     </div>
   );
