@@ -1,4 +1,5 @@
 "use client";
+import { logout } from "@/actions";
 import { RouterApp } from "@/config";
 import { useUiStore } from "@/store";
 import clsx from "clsx";
@@ -62,7 +63,8 @@ export const Sidebar = () => {
 
         {/* Menu */}
         <Link
-          href={RouterApp.home}
+          href={RouterApp.profile}
+          onClick={() => closeMenu()}
           className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
         >
           <IoPersonOutline size={30} />
@@ -83,13 +85,16 @@ export const Sidebar = () => {
           <IoLogInOutline size={30} />
           <span className="ml-3 text-xl capitalize">Ingresar</span>
         </Link>
-        <Link
-          href={RouterApp.home}
-          className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+        <button
+          className="flex w-full items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+          onClick={() => {
+            closeMenu()
+            logout()
+          }}
         >
           <IoLogOutOutline size={30} />
           <span className="ml-3 text-xl capitalize">Salir</span>
-        </Link>
+        </button>
 
         {/* Line Separator */}
         <div className="w-full h-px bg-gray-200 my-10" />

@@ -9,6 +9,7 @@ export class RouterApp {
   static checkout = "/checkout";
   static checkoutAddress = "/checkout/address";
   static orders = "/orders";
+  static profile = "/profile";
   static empty = "/empty";
   static gender = "/gender";
 
