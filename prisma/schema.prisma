@@ -7,6 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+//Enumeracion de Size
 enum Size {
   XS
   S
@@ -17,6 +18,7 @@ enum Size {
   XXXL
 }
 
+//Enumeracion de Genero
 enum Gender {
   men
   women
@@ -24,17 +26,20 @@ enum Gender {
   unisex
 }
 
+//Enumeracion de Role
 enum Role {
   admin
   user
 }
 
+//Categoria
 model Category {
   id      String    @id @default(uuid())
   name    String    @unique
   Product Product[]
 }
 
+//Producto
 model Product {
   id          String   @id @default(uuid())
   title       String
@@ -50,11 +55,13 @@ model Product {
   category     Category       @relation(fields: [categoryId], references: [id])
   categoryId   String
   ProductImage ProductImage[]
+  OrderItem    OrderItem[]
 
   //Cree este indice para acelerar la consultas
   @@index([gender])
 }
 
+//Imagen del Producto
 model ProductImage {
   id        Int     @id @default(autoincrement())
   url       String
@@ -62,6 +69,7 @@ model ProductImage {
   productId String
 }
 
+//Usuario
 model User {
   id            String    @id @default(uuid())
   name          String
@@ -72,14 +80,18 @@ model User {
   image         String?
 
   address UserAddress?
+  Order   Order[]
 }
 
+//Pais
 model Country {
-  id          String        @id
-  name        String
-  UserAddress UserAddress[]
+  id           String         @id
+  name         String
+  UserAddress  UserAddress[]
+  OrderAddress OrderAddress[]
 }
 
+//Direccion del Usuario
 model UserAddress {
   id         String  @id @default(uuid())
   firstName  String
@@ -90,10 +102,70 @@ model UserAddress {
   phone      String
   city       String  @default("")
 
-  //Relaciones
+  //Relaciones de uno a mucho
   country   Country @relation(fields: [countryId], references: [id])
   countryId String
 
+  //Relaciones de uno a uno
   user   User   @relation(fields: [userId], references: [id])
   userId String @unique
+}
+
+//Orden de Compra
+model Order {
+  id           String    @id @default(uuid())
+  subTotal     Float
+  tax          Float
+  total        Float
+  itemsInOrder Int
+  isPaid       Boolean
+  paidAt       DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  //Relaciones de Uno a Mucho
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  //de Mucho a uno
+  OrderItem OrderItem[]
+
+  //de Uno a uno
+  OrderAddress OrderAddress?
+}
+
+//Orden Item
+model OrderItem {
+  id       String @id @default(uuid())
+  quantity Int
+  price    Float
+  size     Size
+
+  //Relaciones
+  order   Order  @relation(fields: [orderId], references: [id])
+  orderId String
+
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+}
+
+//Order Address
+model OrderAddress {
+  id         String  @id @default(uuid())
+  firstName  String
+  lastName   String
+  address    String
+  address2   String?
+  postalCode String
+  city       String
+  phone      String
+
+  //Relaciones de uno a mucho
+  country   Country @relation(fields: [countryId], references: [id])
+  countryId String
+
+  //Relacion de Uno a uno
+  order   Order  @relation(fields: [orderId], references: [id])
+  orderId String @unique
 }
