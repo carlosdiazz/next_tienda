@@ -4,15 +4,26 @@ import { useCartStore } from "@/store";
 import { useEffect, useState } from "react";
 
 import { currencyFormart } from "@/utils";
+import { useRouter } from "next/navigation";
+import { RouterApp } from "@/config";
 
 export const ProductsInCart = () => {
   const [loaded, setloaded] = useState(false);
-
+  const router = useRouter()
   const productsInCart = useCartStore((state) => state.cart);
+  const {itemsInCart, }=useCartStore(state=>state.getSummaryInformation())
+
+  //useEffect(() => {
+  //  setloaded(true);
+  //}, []);
 
   useEffect(() => {
+
+    if (itemsInCart === 0 && loaded === true) {
+      router.replace(`${RouterApp.empty}`)
+    }
     setloaded(true);
-  }, []);
+  }, [itemsInCart, loaded])
 
   if (!loaded) {
     return <p>Cargando...</p>;

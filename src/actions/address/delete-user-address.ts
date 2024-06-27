@@ -9,7 +9,6 @@ export const deleteUserAddres = async (userId: string) => {
     });
     return { ok: true };
   } catch (e) {
-    console.log(e);
     return {
       ok: false,
       message: "No se pudo eliminar la direccion",

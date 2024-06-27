@@ -31,7 +31,7 @@ export default function OrderPage({ params }: Props) {
               className={clsx(
                 "flex items-center rounded-lg py-2 px-3.5 text-xs font-bold text-white mb-5",
                 {
-                  "bg-red-500": true,
+                  "bg-red-500": false,
                   "bg-green-700": true,
                 }
               )}

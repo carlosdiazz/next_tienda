@@ -11,3 +11,5 @@ export { getCountries } from "./country/get-countries";
 export { setUserAddress } from "./address/set-user-address";
 export { deleteUserAddres } from "./address/delete-user-address";
 export { getUserAddress } from "./address/get-user-address";
+
+export { placeOrder } from "./order/place-order";
