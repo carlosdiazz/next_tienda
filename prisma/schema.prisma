@@ -118,11 +118,13 @@ model Order {
   tax          Float
   total        Float
   itemsInOrder Int
-  isPaid       Boolean @default(false)
+  isPaid       Boolean   @default(false)
   paidAt       DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  transactionId String?
 
   //Relaciones de Uno a Mucho
   user   User   @relation(fields: [userId], references: [id])

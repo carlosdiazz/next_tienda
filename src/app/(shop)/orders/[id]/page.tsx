@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Title } from "@/components";
+import { PaypalButton, Title } from "@/components";
 import { RouterApp } from "@/config";
 //import { initialData } from "@/seed/seed";
 import clsx from "clsx";
@@ -116,7 +116,9 @@ export default async function OrderPage({ params }: Props) {
               <span className="mt-5 text-2xl">Total: </span>
               <span className="mt-5 text-2xl text-right">$ {order?.total}</span>
             </div>
-            <div className="mt-5 mb-2 w-full"></div>
+            <div className="mt-5 mb-2 w-full">
+              <PaypalButton amount={order!.total} orderId={order!.id} />
+            </div>
           </div>
         </div>
       </div>
