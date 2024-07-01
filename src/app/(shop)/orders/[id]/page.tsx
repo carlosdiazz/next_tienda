@@ -21,7 +21,6 @@ export default async function OrderPage({ params }: Props) {
 
   //Todo: Llamar el server action
   const { ok, order } = await getOrderById(id);
-  console.log(order);
 
   //Todo: Verificar
   if (!ok) {
@@ -114,14 +113,14 @@ export default async function OrderPage({ params }: Props) {
               <span className="text-right">{currencyFormart(order!.tax)}</span>
 
               <span className="mt-5 text-2xl">Total: </span>
-              <span className="mt-5 text-2xl text-right">$ {order?.total}</span>
+              <span className="mt-5 text-2xl text-right">{currencyFormart(order!.total)}</span>
             </div>
             <div className="mt-5 mb-2 w-full">
-              <PaypalButton amount={order!.total} orderId={order!.id} />
+              {!order?.isPaid && (<PaypalButton amount={order!.total} orderId={order!.id} />)}
             </div>
           </div>
         </div>
       </div>
     </div>
-  );
+  )
 }

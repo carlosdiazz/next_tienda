@@ -38,7 +38,6 @@ export const PlaceOrder = () => {
     }));
 
     const resp = await placeOrder(productsToOrder, address);
-    console.log({ resp });
     if (!resp.ok) {
       setIsPlacingOrder(false);
       seterrorMessage(resp.message);

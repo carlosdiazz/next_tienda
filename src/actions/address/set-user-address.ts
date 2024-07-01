@@ -52,7 +52,6 @@ const createOrReplaceAddres = async (address: Address, userId: string) => {
     });
     return updatedAddress;
   } catch (e) {
-    console.log(e);
     throw new Error(`Error creando o actualizando la direccion`);
   }
 };

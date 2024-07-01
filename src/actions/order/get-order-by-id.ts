@@ -51,7 +51,6 @@ export const getOrderById = async (id: string) => {
       order,
     };
   } catch (e) {
-    console.log(e);
     return {
       ok: false,
       message: "Orden no existe",
