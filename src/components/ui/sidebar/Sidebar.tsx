@@ -18,10 +18,10 @@ import {
 } from "react-icons/io5";
 
 interface Props {
-  session:Session | null
+  session: Session | null;
 }
 
-export const Sidebar = ({session}:Props) => {
+export const Sidebar = ({ session }: Props) => {
   const isSideMenuOpen = useUiStore((state) => state.isSideMenuOpen);
   const closeMenu = useUiStore((state) => state.closeSideMenu);
 
@@ -118,38 +118,37 @@ export const Sidebar = ({session}:Props) => {
           </button>
         )}
 
-         {/* Line Separator */}
+        {/* Line Separator */}
         {isAdmin && (
           <>
             <div className="w-full h-px bg-gray-200 my-10" />
-        <Link
-          href={RouterApp.home}
-          className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
-        >
-          <IoShirtOutline size={30} />
-          <span className="ml-3 text-xl capitalize">Productos</span>
-        </Link>
+            <Link
+              href={RouterApp.home}
+              className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+            >
+              <IoShirtOutline size={30} />
+              <span className="ml-3 text-xl capitalize">Productos</span>
+            </Link>
 
-        <Link
-          href={RouterApp.home}
-          className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
-        >
-          <IoTicketOutline size={30} />
-          <span className="ml-3 text-xl capitalize">Ordenes</span>
-        </Link>
+            <Link
+              href={`${RouterApp.adminOrders}`}
+              onClick={() => closeMenu()}
+              className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+            >
+              <IoTicketOutline size={30} />
+              <span className="ml-3 text-xl capitalize">Ordenes</span>
+            </Link>
 
-        <Link
-          href={RouterApp.home}
-          className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
-        >
-          <IoPeopleOutline size={30} />
-          <span className="ml-3 text-xl capitalize">Usuarios</span>
-        </Link>
+            <Link
+              href={RouterApp.adminUsers}
+              onClick={() => closeMenu()}
+              className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+            >
+              <IoPeopleOutline size={30} />
+              <span className="ml-3 text-xl capitalize">Usuarios</span>
+            </Link>
           </>
         )}
-
-       
-        
       </nav>
     </div>
   );

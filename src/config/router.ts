@@ -13,6 +13,10 @@ export class RouterApp {
   static empty = "/empty";
   static gender = "/gender";
 
+  //ADMIN
+  static adminOrders = "/admin/orders";
+  static adminUsers = "/admin/users";
+
   static authLogin = "/auth/login";
   static authNewAccount = "/auth/new-account";
 }

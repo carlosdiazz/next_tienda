@@ -15,6 +15,10 @@ export { getUserAddress } from "./address/get-user-address";
 export { placeOrder } from "./order/place-order";
 export { getOrderById } from "./order/get-order-by-id";
 export { getOrdersByUser } from "./order/get-orders-by-user";
+export { getPaginatedOrders } from "./order/get-paginared-orders";
 
 export { setTransactionId } from "./payments/set-transaction-id";
 export { paypalCheckPayment } from "./payments/paypal-payment";
+
+export { getPaginatedUsers } from "./user/get-paginates-user";
+export { changeUserRole } from "./user/change-user-role";

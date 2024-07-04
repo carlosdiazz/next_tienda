@@ -22,6 +22,8 @@ export default async function OrderPage({ params }: Props) {
   //Todo: Llamar el server action
   const { ok, order } = await getOrderById(id);
 
+  console.log(`Verificar ${ok} o ${order}`);
+
   //Todo: Verificar
   if (!ok) {
     redirect(`${RouterApp.home}`);

@@ -37,7 +37,7 @@ export const AddressForm = ({ countries, userStoredAddress = {} }: Props) => {
     defaultValues: {
       //TODO: ller de la base de datos
       ...(userStoredAddress as any),
-      rememberAddress: false
+      rememberAddress: true
     },
   });
 

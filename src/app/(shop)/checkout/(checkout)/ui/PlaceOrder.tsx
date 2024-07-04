@@ -5,7 +5,6 @@ import { RouterApp } from "@/config";
 import { useAddressStore, useCartStore } from "@/store";
 import { currencyFormart, sleep } from "@/utils";
 import clsx from "clsx";
-import AppRouter from "next/dist/client/components/app-router";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -29,7 +28,6 @@ export const PlaceOrder = () => {
 
   const onPlaceORder = async () => {
     setIsPlacingOrder(true);
-    await sleep(1);
 
     const productsToOrder = cart.map((product) => ({
       productId: product.id,
@@ -38,6 +36,7 @@ export const PlaceOrder = () => {
     }));
 
     const resp = await placeOrder(productsToOrder, address);
+    console.log(resp);
     if (!resp.ok) {
       setIsPlacingOrder(false);
       seterrorMessage(resp.message);
@@ -45,7 +44,8 @@ export const PlaceOrder = () => {
     }
     //* Todo salio bien!
     clearCart();
-    router.replace(`${RouterApp.orders}/${resp.order!}`)
+    
+    router.push(`${RouterApp.orders}/${resp.order!}`)
   };
 
   if (!loaded) {
