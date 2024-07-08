@@ -1,8 +1,10 @@
+import { notFound } from "next/navigation";
 
 export default function ProductsPage() {
-  return (
-    <div>
-      <h1>Products Page</h1>
-    </div>
-  );
+  notFound()
+  //return (
+  //  <div>
+  //    <h1>Products Page</h1>
+  //  </div>
+  //);
 }

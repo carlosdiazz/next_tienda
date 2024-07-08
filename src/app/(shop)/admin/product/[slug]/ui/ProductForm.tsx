@@ -1,13 +1,15 @@
 "use client";
 
-import { createUpdateProduct } from "@/actions";
-import { Categories, Product, ProductImage } from "@/interfaces";
+import { createUpdateProduct, deleteProductImage } from "@/actions";
+import { ProductImage} from "@/components";
+import { RouterApp } from "@/config";
+import { Categories, Product, ProductImage as ProductImageInterface } from "@/interfaces";
 import clsx from "clsx";
-import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 
 interface Props {
-  product: Partial<Product>  & { ProductImage?: ProductImage[] };
+  product: Partial<Product> & { ProductImage?: ProductImageInterface[] };
   categories: Categories[];
 }
 
@@ -25,9 +27,12 @@ interface FormInputs {
   categoryId: string;
 
   //TODO: IMAGES
+  images?: FileList;
 }
 
 export const ProductForm = ({ product, categories }: Props) => {
+  const router = useRouter();
+
   const {
     handleSubmit, //para el submit
     register, //Pra registrar Campos
@@ -40,14 +45,17 @@ export const ProductForm = ({ product, categories }: Props) => {
       ...product,
       tags: product.tags?.join(", "),
       sizes: product.sizes ?? [],
+
       //TODO images
+      images: undefined,
+
     },
   });
 
   const onSubmit = async (data: FormInputs) => {
     const formData = new FormData();
 
-    const { ...productTosave } = data;
+    const {images, ...productTosave } = data;
 
     if (product.id) {
       formData.append("id", product.id);
@@ -62,9 +70,19 @@ export const ProductForm = ({ product, categories }: Props) => {
     formData.append("categoryId", productTosave.categoryId);
     formData.append("gender", productTosave.gender);
 
-    const { ok } = await createUpdateProduct(formData)
-    console.log(ok);
+    if (images) {
+      for (let i = 0; i < images.length; i++)  {
+        formData.append('images', images[i])
+      }
+    }
 
+    const { ok, product:updateProduct } = await createUpdateProduct(formData);
+    if (!ok) {
+      alert("Prodcuto no se pudo actualizar");
+      return;
+    }
+
+    router.replace(`${RouterApp.adminProduct}/${updateProduct?.slug}`);
   };
 
   const onChangeSize = (size: string) => {
@@ -157,8 +175,7 @@ export const ProductForm = ({ product, categories }: Props) => {
 
       {/* Selector de tallas y fotos */}
       <div className="w-full">
-
-      <div className="flex flex-col mb-2">
+        <div className="flex flex-col mb-2">
           <span>Price</span>
           <input
             type="number"
@@ -167,7 +184,7 @@ export const ProductForm = ({ product, categories }: Props) => {
           />
         </div>
 
-      <div className="flex flex-col mb-2">
+        <div className="flex flex-col mb-2">
           <span>Inventario</span>
           <input
             type="number"
@@ -201,18 +218,19 @@ export const ProductForm = ({ product, categories }: Props) => {
             <span>Fotos</span>
             <input
               type="file"
+              {...register('images')}
               multiple
               className="p-2 border rounded-md bg-gray-200"
-              accept="image/png, image/jpeg"
+              accept="image/png, image/jpeg, image/avif"
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {product.ProductImage?.map((image) => (
               <div key={image.id}>
-                <Image
+                <ProductImage
                   alt={product.title ?? ""}
-                  src={`/products/${image.url}`}
+                  src={image.url}
                   width={300}
                   height={300}
                   className="rounded shadow-md"
@@ -220,7 +238,7 @@ export const ProductForm = ({ product, categories }: Props) => {
                 <button
                   type="button"
                   className="btn-danger w-full rounded-b-xl"
-                  onClick={() => console.log(image.id, image.url)}
+                  onClick={() => deleteProductImage(image.id, image.url)}
                 >
                   Eliminar
                 </button>
