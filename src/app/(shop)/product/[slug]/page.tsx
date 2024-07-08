@@ -11,6 +11,7 @@ import {
   StockLabel,
 } from "@/components";
 import { titleFont } from "@/config";
+import { notFound } from "next/navigation";
 
 interface Props {
   params: {
@@ -47,10 +48,10 @@ export default async function ProductSlugPage({ params }: Props) {
   //const product = initialData.products.find((product) => product.slug === slug);
   const product = await getProductBySlug(slug);
 
-  //if (!product) {
-  //  //SI no existe lo mando para NotFound
-  //  notFound();
-  //}
+  if (!product) {
+    //SI no existe lo mando para NotFound
+    notFound();
+  }
 
   return (
     //En pantallas pequena sera una COlumna en la demas 3
@@ -59,32 +60,32 @@ export default async function ProductSlugPage({ params }: Props) {
       <div className="col-span-1 md:col-span-2 ">
         {/* Mobile Slidesshow */}
         <ProductMobileSlideShow
-          title={product.title}
-          images={product.images}
+          title={product!.title}
+          images={product!.images}
           className="block md:hidden"
         />
 
         {/* Destop Slidesshow */}
         <ProductSlideShow
-          title={product.title}
-          images={product.images}
+          title={product!.title}
+          images={product!.images}
           className="hidden md:block"
         />
       </div>
 
       {/* Detalles */}
       <div className="col-span-1 px-5 ">
-        <StockLabel slug={product.slug} />
+        <StockLabel slug={product!.slug} />
         <h1 className={`${titleFont.className} antialiased font-bold text-xl`}>
-          {product.title}
+          {product!.title}
         </h1>
-        <p className="text-lg mb-5">${product.price}.00</p>
+        <p className="text-lg mb-5">${product!.price}.00</p>
 
-        <AddToCart product={product}/>
+        <AddToCart product={product!}/>
 
         {/* Descripcion */}
         <h3 className="font-bold text-sm">Descripcion</h3>
-        <p className="font-light">{product.description}</p>
+        <p className="font-light">{product!.description}</p>
       </div>
     </div>
   );

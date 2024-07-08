@@ -1,11 +1,13 @@
 "use client";
 
+import { createUpdateProduct } from "@/actions";
 import { Categories, Product, ProductImage } from "@/interfaces";
+import clsx from "clsx";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 
 interface Props {
-  product: Product & { ProductImage?: ProductImage[] };
+  product: Partial<Product>  & { ProductImage?: ProductImage[] };
   categories: Categories[];
 }
 
@@ -30,18 +32,53 @@ export const ProductForm = ({ product, categories }: Props) => {
     handleSubmit, //para el submit
     register, //Pra registrar Campos
     formState: { isValid },
+    getValues,
+    setValue,
+    watch,
   } = useForm<FormInputs>({
     defaultValues: {
       ...product,
-      tags: product.tags.join(", "),
+      tags: product.tags?.join(", "),
       sizes: product.sizes ?? [],
       //TODO images
     },
   });
 
   const onSubmit = async (data: FormInputs) => {
-    console.log({ data });
+    const formData = new FormData();
+
+    const { ...productTosave } = data;
+
+    if (product.id) {
+      formData.append("id", product.id);
+    }
+    formData.append("title", productTosave.title);
+    formData.append("slug", productTosave.slug);
+    formData.append("description", productTosave.description);
+    formData.append("price", productTosave.price.toString());
+    formData.append("inStock", productTosave.inStock.toString());
+    formData.append("sizes", productTosave.sizes.toString());
+    formData.append("tags", productTosave.tags);
+    formData.append("categoryId", productTosave.categoryId);
+    formData.append("gender", productTosave.gender);
+
+    const { ok } = await createUpdateProduct(formData)
+    console.log(ok);
+
   };
+
+  const onChangeSize = (size: string) => {
+    //Es un arreglo que no acpeta duplciado
+    const sizes = new Set(getValues("sizes"));
+
+    sizes.has(size) ? sizes.delete(size) : sizes.add(size);
+    setValue("sizes", Array.from(sizes));
+
+    console.log(sizes);
+  };
+
+  //"Si esta propeidad cambia se va  redibujar"
+  watch("sizes");
 
   return (
     <form
@@ -75,15 +112,6 @@ export const ProductForm = ({ product, categories }: Props) => {
             className="p-2 border rounded-md bg-gray-200"
             {...register("description", { required: true })}
           ></textarea>
-        </div>
-
-        <div className="flex flex-col mb-2">
-          <span>Price</span>
-          <input
-            type="number"
-            className="p-2 border rounded-md bg-gray-200"
-            {...register("price", { required: true, min: 0 })}
-          />
         </div>
 
         <div className="flex flex-col mb-2">
@@ -129,6 +157,25 @@ export const ProductForm = ({ product, categories }: Props) => {
 
       {/* Selector de tallas y fotos */}
       <div className="w-full">
+
+      <div className="flex flex-col mb-2">
+          <span>Price</span>
+          <input
+            type="number"
+            className="p-2 border rounded-md bg-gray-200"
+            {...register("price", { required: true, min: 0 })}
+          />
+        </div>
+
+      <div className="flex flex-col mb-2">
+          <span>Inventario</span>
+          <input
+            type="number"
+            className="p-2 border rounded-md bg-gray-200"
+            {...register("inStock", { required: true, min: 0 })}
+          />
+        </div>
+
         {/* As checkboxes */}
         <div className="flex flex-col">
           <span>Tallas</span>
@@ -137,7 +184,13 @@ export const ProductForm = ({ product, categories }: Props) => {
               // bg-blue-500 text-white <--- si está seleccionado
               <div
                 key={size}
-                className="flex  items-center justify-center w-10 h-10 mr-2 border rounded-md"
+                onClick={() => onChangeSize(size)}
+                className={clsx(
+                  "p-2 border cursor-pointer rounded-md mr-2 mb-2 w-14 transition-all text-center",
+                  {
+                    "bg-blue-500 text-white": getValues("sizes").includes(size),
+                  }
+                )}
               >
                 <span>{size}</span>
               </div>
@@ -167,7 +220,7 @@ export const ProductForm = ({ product, categories }: Props) => {
                 <button
                   type="button"
                   className="btn-danger w-full rounded-b-xl"
-                  onClick={()=>console.log(image.id, image.url)}
+                  onClick={() => console.log(image.id, image.url)}
                 >
                   Eliminar
                 </button>

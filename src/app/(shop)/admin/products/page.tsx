@@ -1,7 +1,7 @@
 export const revalidate = 0;
 // https://tailwindcomponents.com/component/hoverable-table
 import { getPaginatedProductsWithImages } from "@/actions";
-import { Pagination, Title } from "@/components";
+import { Pagination, ProductImage, Title } from "@/components";
 import { RouterApp } from "@/config";
 import { currencyFormart } from "@/utils";
 import Image from "next/image";
@@ -21,10 +21,10 @@ export default async function ProductsAdminPages({ searchParams }: Props) {
 
   return (
     <>
-      <Title title="Mantenimeinto de productos" />
+      <Title title="Mantenimiento de productos" />
 
       <div className="flex justify-end mb-5">
-        <Link href={""} className="btn-primary">
+        <Link href={`${RouterApp.adminProduct}/new`} className="btn-primary">
           Nuevo Producto
         </Link>
       </div>
@@ -80,8 +80,8 @@ export default async function ProductsAdminPages({ searchParams }: Props) {
               >
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                   <Link href={`${RouterApp.product}/${product.slug}`}>
-                    <Image
-                      src={`/products/${product.ProductImage[0].url}`}
+                    <ProductImage
+                      src={product.ProductImage[0]?.url}
                       alt={product.title}
                       width={80}
                       height={80}
