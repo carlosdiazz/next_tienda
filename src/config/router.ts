@@ -16,6 +16,8 @@ export class RouterApp {
   //ADMIN
   static adminOrders = "/admin/orders";
   static adminUsers = "/admin/users";
+  static adminProducts = "/admin/products";
+  static adminProduct = "/admin/product";
 
   static authLogin = "/auth/login";
   static authNewAccount = "/auth/new-account";

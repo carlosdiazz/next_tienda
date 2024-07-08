@@ -9,6 +9,7 @@ export const getProductBySlug = async (slug: string) => {
         ProductImage: {
           select: {
             url: true,
+            id: true,
           },
         },
       },
@@ -17,10 +18,10 @@ export const getProductBySlug = async (slug: string) => {
       },
     });
 
-    const { ProductImage, ...rest } = product;
-
+    //const { ProductImage, ...rest } = product;
+    console.log(`ACA => ${JSON.stringify(product)}`);
     return {
-      ...rest,
+      ...product,
       images: product.ProductImage.map((image) => image.url),
     };
   } catch (error) {
