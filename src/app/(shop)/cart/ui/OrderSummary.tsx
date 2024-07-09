@@ -19,7 +19,7 @@ export const OrderSummary = () => {
     if (itemsInCart === 0 && loaded === true) {
       router.replace(`${RouterApp.empty}`)
     }
-  }, [itemsInCart, loaded])
+  }, [itemsInCart, loaded, router])
 
 
   if(!loaded) return <p>Cargando...</p>

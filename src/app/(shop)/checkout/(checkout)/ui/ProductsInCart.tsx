@@ -24,7 +24,7 @@ export const ProductsInCart = () => {
       router.replace(`${RouterApp.empty}`)
     }
     setloaded(true);
-  }, [ loaded])
+  }, [ loaded, itemsInCart, router])
 
   if (!loaded) {
     return <p>Cargando...</p>;
